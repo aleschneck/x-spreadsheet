@@ -465,12 +465,17 @@ export default class DataProxy {
 
     if (/\r\n/.test(txt)) lines = txt.split('\r\n').map(it => it.replace(/"/g, '').split('\t'));
     else lines = txt.split('\n').map(it => it.replace(/"/g, '').split('\t'));
-
     if (lines.length) {
       const { rows, selector } = this;
-
+      if (rows.len < lines.length) {
+        rows.len = lines.length;
+      }
       this.changeData(() => {
         rows.paste(lines, selector.range);
+        // if (lines.length > 10000) {
+        //   this.clearClipboard();
+        //   console.log('cleared clipboard');
+        // }
       });
     }
   }
